@@ -18,6 +18,9 @@ class Connect4Solver:
         self.trans_count = 0
         self.pruning_count = 0
 
+    def show_counts(self):
+        print(f"Explored: {self.explored_count}, Pruning: {self.pruning_count}, TT Cutoff: {self.trans_count}")
+
     def init_hash(self):
         # Initialize Zobrist hashing
         # Calculate minimum bits needed: log2(3^(rows*cols)) ≈ rows*cols*1.585
@@ -201,7 +204,7 @@ class Connect4Solver:
         for move in self.get_moves():
             self.explored_count += 1
             if self.explored_count % 1000000 == 0:
-                show_counts(self)
+                self.show_counts()
 
             y, x = move
             self.make_move(y, x)
@@ -226,10 +229,6 @@ class Connect4Solver:
         self.trans_table[self.curr_symm_hash] = (best_score, None)  
         return best_score, None
 
-
-def show_counts(solver):
-    print(f"Explored: {solver.explored_count}, Pruning: {solver.pruning_count}, TT Cutoff: {solver.trans_count}")
-
 def show_result(solver, score, move):
     if score == 1:
         winner = f"Player {solver.player}"
@@ -238,7 +237,7 @@ def show_result(solver, score, move):
     else:
         winner = "Draw"
     print(f"{solver.__class__.__name__} Result")
-    show_counts(solver)
+    solver.show_counts(solver)
     print(f"Winner: {winner}, Best move for Player {solver.player}: {move}")
 
 if __name__ == "__main__":
